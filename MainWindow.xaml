@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="625">
     <StackPanel Name="MainStackPanel" Orientation="Vertical" VerticalAlignment="Top">
-            <Button Name="RecordButton" Width="250" Height="100" FontSize="32" VerticalAlignment="Top" Click="RecordButton_Click">Start!</Button>
         <TextBox Name="OutputTextbox" VerticalAlignment="Top" Width="600" TextWrapping="Wrap" FontSize="18"></TextBox>
     </StackPanel>
 </Window>
