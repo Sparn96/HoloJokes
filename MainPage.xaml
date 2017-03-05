@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="HoloJokes.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HoloJokes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="982" Margin="47,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="767"/>
+
+
+        <CaptureElement x:Name="PreviewControl" Stretch="Uniform"/>
+        <Button x:Name="GetEmotion" Content="Find Url Emotion" HorizontalAlignment="Left" Height="36" Margin="1044,546,0,0" VerticalAlignment="Top" Width="206" Click="GetEmotion_Click"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="36" Margin="1263,638,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="657" TextChanged="textBox_TextChanged"/>
+
+        <Image x:Name="image" HorizontalAlignment="Left" Height="281" Margin="1364,711,0,0" VerticalAlignment="Top" Width="448"/>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="36" Margin="1263,546,0,0" TextWrapping="Wrap" Text="http://dreamatico.com/data_images/people/people-2.jpg" VerticalAlignment="Top" Width="647"/>
+    </Grid>
+</Page>
