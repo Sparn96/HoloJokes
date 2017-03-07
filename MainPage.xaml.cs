@@ -72,95 +72,15 @@ namespace HoloJokes
 
         private void GetEmotion_Click(object sender, RoutedEventArgs e)
         {
-            
-            url = @"http://dreamatico.com/data_images/people/people-2.jpg";
-            url = textBox1.Text;
-            GetEmotions(url);
-            //GetLocalEmotions();
-
-           image.Source = new BitmapImage(
-    new Uri(url, UriKind.Absolute));
-
-            
+              
+           GetLocalEmotions();
 
         }
-
-        private async void GetEmotions(string imageUrl)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings =
-            Windows.Storage.ApplicationData.Current.LocalSettings;
-            Windows.Storage.StorageFolder localFolder =
-            Windows.Storage.ApplicationData.Current.LocalFolder;
-
-            string key = "22da994748964c7c97432cf7c4f1695c";
-
-            var emotionServiceClient = new EmotionServiceClient(key);
-            Emotion[] emotionResult = await emotionServiceClient.RecognizeAsync(imageUrl);
-
-            var sb1 = new StringBuilder();
-            var sb2 = new StringBuilder();
-            var faceNumber = 0;
-            foreach (Emotion em in emotionResult)
-            {
-                faceNumber++;
-                var scores = em.Scores;
-
-                var anger = scores.Anger;
-                var contempt = scores.Contempt;
-                var disgust = scores.Disgust;
-                var fear = scores.Fear;
-                var happiness = scores.Happiness;
-                var neutral = scores.Neutral;
-                var surprise = scores.Surprise;
-                var sadness = scores.Sadness;
-
-                sb1.Append(string.Format("Face {0}\n", faceNumber));
-                sb1.Append("Scores:\n");
-                sb1.Append(string.Format("Anger: {0:0.000000}\n", anger));
-                sb1.Append(string.Format("Contempt: {0:0.000000}\n", contempt));
-                sb1.Append(string.Format("Disgust: {0:0.000000}\n", disgust));
-                sb1.Append(string.Format("Fear: {0:0.000000}\n", fear));
-                sb1.Append(string.Format("Happiness: {0:0.000000}\n", happiness));
-                sb1.Append(string.Format("Neutral: {0:0.000000}\n", neutral));
-                sb1.Append(string.Format("Surprise: {0:0.000000}\n", surprise));
-                sb1.Append(string.Format("Sadness: {0:0.000000}\n", sadness));
-                sb1.Append("\n");
-
-                var emotionScoresList = new List<EmotionScore>();
-                emotionScoresList.Add(new EmotionScore("anger", anger));
-                emotionScoresList.Add(new EmotionScore("contempt", contempt));
-                emotionScoresList.Add(new EmotionScore("disgust", disgust));
-                emotionScoresList.Add(new EmotionScore("fear", fear));
-                emotionScoresList.Add(new EmotionScore("happiness", happiness));
-                emotionScoresList.Add(new EmotionScore("neutral", neutral));
-                emotionScoresList.Add(new EmotionScore("surprise", surprise));
-                emotionScoresList.Add(new EmotionScore("sadness", sadness));
-
-                var maxEmotionScore = emotionScoresList.Max(e => e.EmotionValue);
-                var likelyEmotion = emotionScoresList.First(e => e.EmotionValue == maxEmotionScore);
-
-                // System.Drawing.Rectangle rec = new System.Drawing.Rectangle();
-
-
-                string likelyEmotionText = string.Format("Face {0} is {1:N2}% likely to experiencing: {2}\n\n",
-                    faceNumber, likelyEmotion.EmotionValue * 100, likelyEmotion.EmotionName.ToUpper());
-                sb2.Append(likelyEmotionText);
-            }
-            var resultsDump = sb1.ToString();
-            // save dump to container
-            textBox.Text = sb2.ToString();
-
-        }
-        
         private async void GetLocalEmotions()                    //used to grab local camera informaiton
         {
             string key = "22da994748964c7c97432cf7c4f1695c";
 
             var emotionServiceClient = new EmotionServiceClient(key);
-
-
-
-            
 
             var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreatePng());
          
@@ -169,95 +89,39 @@ namespace HoloJokes
             var PNGSTREAM = capturedPhoto.Frame.AsStream();
             await lowLagCapture.FinishAsync();
 
+            string responseString;
 
-
-
-            Emotion em = await sendMyRequest(PNGSTREAM);                //ONLY ONE FACE FOR NOW
-       
             
-            var sb1 = new StringBuilder();
-            var sb2 = new StringBuilder();
-            var faceNumber = 0;
-            
-                faceNumber++;
-                var scores = em.Scores;
 
-                var anger = scores.Anger;
-                var contempt = scores.Contempt;
-                var disgust = scores.Disgust;
-                var fear = scores.Fear;
-                var happiness = scores.Happiness;
-                var neutral = scores.Neutral;
-                var surprise = scores.Surprise;
-                var sadness = scores.Sadness;
+            responseString = await MakeRequest(PNGSTREAM);
+            Emotion[] em = JsonConvert.DeserializeObject<Emotion[]>(responseString);            //This might need to be tweaked
 
-                sb1.Append(string.Format("Face {0}\n", faceNumber));
-                sb1.Append("Scores:\n");
-                sb1.Append(string.Format("Anger: {0:0.000000}\n", anger));
-                sb1.Append(string.Format("Contempt: {0:0.000000}\n", contempt));
-                sb1.Append(string.Format("Disgust: {0:0.000000}\n", disgust));
-                sb1.Append(string.Format("Fear: {0:0.000000}\n", fear));
-                sb1.Append(string.Format("Happiness: {0:0.000000}\n", happiness));
-                sb1.Append(string.Format("Neutral: {0:0.000000}\n", neutral));
-                sb1.Append(string.Format("Surprise: {0:0.000000}\n", surprise));
-                sb1.Append(string.Format("Sadness: {0:0.000000}\n", sadness));
-                sb1.Append("\n");
+            string anger, contempt, disgust, fear, happiness, neutral, sadness, surprise;
 
-                var emotionScoresList = new List<EmotionScore>();
-                emotionScoresList.Add(new EmotionScore("anger", anger));
-                emotionScoresList.Add(new EmotionScore("contempt", contempt));
-                emotionScoresList.Add(new EmotionScore("disgust", disgust));
-                emotionScoresList.Add(new EmotionScore("fear", fear));
-                emotionScoresList.Add(new EmotionScore("happiness", happiness));
-                emotionScoresList.Add(new EmotionScore("neutral", neutral));
-                emotionScoresList.Add(new EmotionScore("surprise", surprise));
-                emotionScoresList.Add(new EmotionScore("sadness", sadness));
+            anger =      "Anger:     " + em[0].Scores.Anger.ToString();
+            contempt =   "Contempt:  " + em[0].Scores.Contempt.ToString();
+            disgust =    "Disgust:   " + em[0].Scores.Disgust.ToString();
+            fear =       "Fear:      " + em[0].Scores.Fear.ToString();
+            happiness =  "Happiness: " + em[0].Scores.Happiness.ToString();
+            neutral =    "Neutral:   " + em[0].Scores.Neutral.ToString();
+            sadness =    "Sadness:   " + em[0].Scores.Sadness.ToString();
+            surprise =   "Surprise:  " + em[0].Scores.Surprise.ToString();
 
-                var maxEmotionScore = emotionScoresList.Max(e => e.EmotionValue);
-                var likelyEmotion = emotionScoresList.First(e => e.EmotionValue == maxEmotionScore);
-
-                // System.Drawing.Rectangle rec = new System.Drawing.Rectangle();
+            listView.Items.Clear();
+            listView.Items.Add(anger);
+            listView.Items.Add(contempt);
+            listView.Items.Add(disgust);
+            listView.Items.Add(fear);
+            listView.Items.Add(happiness);
+            listView.Items.Add(neutral);
+            listView.Items.Add(sadness);
+            listView.Items.Add(surprise);
 
 
+            //FaceRect.Height = 3 * em[0].FaceRectangle.Height;           //Sets the face rect? 
+            //FaceRect.Width = 3 * em[0].FaceRectangle.Width;
 
 
-                string likelyEmotionText = string.Format("Face {0} is {1:N2}% likely to experiencing: {2}\n\n",
-                    faceNumber, likelyEmotion.EmotionValue * 100, likelyEmotion.EmotionName.ToUpper());
-                sb2.Append(likelyEmotionText);
-            
-            var resultsDump = sb1.ToString();
-            // save dump to container
-            textBox.Text = sb2.ToString();
-        }
-        
-
-        private string xGetLikelyEmotion()
-        {
-            return "";
-        }
-
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        public async Task<Emotion> sendMyRequest(Stream PNGSTREAM)
-        {
-            byte[] bytes;
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "22da994748964c7c97432cf7c4f1695c");
-            string uri = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize?";
-            HttpResponseMessage response;
-    
-            BinaryReader binaryReader = new BinaryReader(PNGSTREAM);
-            bytes = binaryReader.ReadBytes((int)PNGSTREAM.Length);
-
-            using (var content = new ByteArrayContent(bytes))
-            {
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                response = await client.PostAsync(uri, content);
-                return JsonConvert.DeserializeObject<Emotion>(response.Content.ReadAsStringAsync().Result);
-            }
         }
 
 
@@ -268,19 +132,22 @@ namespace HoloJokes
             return binaryReader.ReadBytes((int)fileStream.Length);
         }
 
-        static async void MakeRequest(string imageFilePath)
+        static async Task<string> MakeRequest(Stream IMAGE)
         {
             var client = new HttpClient();
 
             // Request headers
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "22da994748964c7c97432cf7c4f1695c");
+            //client.DefaultRequestHeaders.Add("Content-Type", "application/octet-stream");
 
             string uri = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize?";
             HttpResponseMessage response;
-            string responseContent;
 
-            // Request body. Try this sample with a locally stored JPEG image.
-            byte[] byteData = GetImageAsByteArray(imageFilePath);
+
+           
+
+            BinaryReader binaryReader = new BinaryReader(IMAGE);
+            byte[] byteData = binaryReader.ReadBytes((int)IMAGE.Length);
 
             using (var content = new ByteArrayContent(byteData))
             {
@@ -288,8 +155,9 @@ namespace HoloJokes
                 // The other content types you can use are "application/json" and "multipart/form-data".
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 response = await client.PostAsync(uri, content);
-                responseContent = response.Content.ReadAsStringAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
             }
+           
         }
 
         private async Task StartPreviewAsync()
@@ -357,9 +225,10 @@ namespace HoloJokes
             }
         }
 
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
-
-
+        }
     }
 
 

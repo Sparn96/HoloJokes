@@ -9,14 +9,9 @@
 
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="982" Margin="47,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="767"/>
-
-
         <CaptureElement x:Name="PreviewControl" Stretch="Uniform"/>
-        <Button x:Name="GetEmotion" Content="Find Url Emotion" HorizontalAlignment="Left" Height="36" Margin="1044,546,0,0" VerticalAlignment="Top" Width="206" Click="GetEmotion_Click"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="36" Margin="1263,638,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="657" TextChanged="textBox_TextChanged"/>
-
-        <Image x:Name="image" HorizontalAlignment="Left" Height="281" Margin="1364,711,0,0" VerticalAlignment="Top" Width="448"/>
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="36" Margin="1263,546,0,0" TextWrapping="Wrap" Text="http://dreamatico.com/data_images/people/people-2.jpg" VerticalAlignment="Top" Width="647"/>
+        <Button x:Name="GetEmotion" Content="TakeSelfie" HorizontalAlignment="Left" Height="36" Margin="1182,29,0,0" VerticalAlignment="Top" Width="206" Click="GetEmotion_Click"/>
+        <Rectangle x:Name="FaceRect" HorizontalAlignment="Left" Height="66" Margin="1028,29,0,0" Stroke="Black" VerticalAlignment="Top" Width="122" Opacity="0.1" RequestedTheme="Light" StrokeThickness="5"/>
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="366" Margin="356,172,0,0" VerticalAlignment="Top" Width="357" FontWeight="Bold" Foreground="#FF10EA06"/>
     </Grid>
 </Page>
