@@ -39,7 +39,6 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace HoloJokes
 {
@@ -78,7 +77,7 @@ namespace HoloJokes
         }
         private async void GetLocalEmotions()                    //used to grab local camera informaiton
         {
-            string key = "22da994748964c7c97432cf7c4f1695c";
+            
 
             var emotionServiceClient = new EmotionServiceClient(key);
 
@@ -137,8 +136,8 @@ namespace HoloJokes
             var client = new HttpClient();
 
             // Request headers
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "22da994748964c7c97432cf7c4f1695c");
-            //client.DefaultRequestHeaders.Add("Content-Type", "application/octet-stream");
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "INSERT YOU API KEY HERE");
+            
 
             string uri = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize?";
             HttpResponseMessage response;
@@ -150,10 +149,8 @@ namespace HoloJokes
             byte[] byteData = binaryReader.ReadBytes((int)IMAGE.Length);
 
             using (var content = new ByteArrayContent(byteData))
-            {
-                // This example uses content type "application/octet-stream".
-                // The other content types you can use are "application/json" and "multipart/form-data".
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            {               
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");  //pass as binary stream
                 response = await client.PostAsync(uri, content);
                 return response.Content.ReadAsStringAsync().Result;
             }
@@ -227,7 +224,7 @@ namespace HoloJokes
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+                //nothing
         }
     }
 
